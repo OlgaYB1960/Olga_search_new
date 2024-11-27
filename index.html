@@ -60,7 +60,13 @@
                         <!-- populated by JS with list of years -->
                       </select>
                     </label>
-                   
+                     <script type="text/javascript">
+                      const populateYears = (selector, minYear, maxYear, selectedYear) => {
+                        document.querySelector(selector).innerHTML = 
+                          Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
+                          .map(y => `<option value="${y}" ${y === selectedYear ? 'selected' : ''}>${y}</option>`)
+                          .join('\n')
+                      }
                   </div>
                 </form>
               </details>
