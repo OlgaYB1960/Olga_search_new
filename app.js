@@ -18,17 +18,6 @@ const $options = document.querySelector('.AdvancedOptions form')
 $app.classList.add('loading')
 let songsById = {}
 
-fetch('billboard_1965-2015.json')
-  .then(response => response.json())
-  .then((allSongs) => {
-    songsById = allSongs.reduce((byId, song) => {
-      byId[song.id] = song
-      return byId
-    }, {})
-    return miniSearch.addAll(allSongs)
-  }).then(() => {
-    $app.classList.remove('loading')
-  })
 
 // Bind event listeners:
 
