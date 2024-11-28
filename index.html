@@ -3,6 +3,7 @@
   <head>
     <title>MiniSearch Example</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+   <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.0/dist/umd/index.min.js"></script>
     <style>
       * {
   box-sizing: border-box;
@@ -419,7 +420,7 @@ const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpper
             <div class="SearchBox">
               <div class="Search">
                 <input type="text" spellCheck="false" autoComplete="none" autoCorrect="none" autoCapitalize="none" placeholder="Ввести значение" />
-                <button class="clear"></button>
+                <button class="clear">&times;</button>
               </div>
 
               <ul class="SuggestionList">
@@ -485,7 +486,7 @@ const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpper
         </article>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.0/dist/umd/index.min.js"></script>
+  
  
   </body>
 </html>
