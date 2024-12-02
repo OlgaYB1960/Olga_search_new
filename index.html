@@ -318,7 +318,7 @@ details, summary {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.0/dist/umd/index.min.js"></script>
    
-     <script>
+     <script  type="text/javascript">>
 const miniSearch = new MiniSearch({
   fields: ['artist', 'title'],
   storeFields: ['year']
@@ -335,20 +335,7 @@ const $suggestionList = document.querySelector('.SuggestionList')
 const $options = document.querySelector('.AdvancedOptions form')
 
 // Fetch and index data
-$app.classList.add('loading')
-let songsById = {}
 
-fetch('billboard_1965-2015.json')
-  .then(response => response.json())
-  .then((allSongs) => {
-    songsById = allSongs.reduce((byId, song) => {
-      byId[song.id] = song
-      return byId
-    }, {})
-    return miniSearch.addAll(allSongs)
-  }).then(() => {
-    $app.classList.remove('loading')
-  })
 
 // Bind event listeners:
 
@@ -503,6 +490,8 @@ const getSearchOptions = () => {
   return searchOptions
 }
 
-const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpperCase())</script>
+const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpperCase())
+     
+     </script>
   </body>
 </html>
