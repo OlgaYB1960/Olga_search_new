@@ -345,15 +345,10 @@ let songsById = {}
              {"id":4,"rank":5,"title":"youve lost that lovin feelin","artist":"the righteous brothers","year":"1965"},
 ];
        
- fetch('./billboard_1965-2015.json')
+ fetch(arr)
   .then(response => response.json())
-  .then((allSongs) => {
-    songsById = allSongs.reduce((byId, song) => {
-      byId[song.id] = song
-      return byId
-    }, {})
-    return miniSearch.addAll(allSongs)
-  }).then(() => {
+  .then(data => console.log(data))
+   .then(() => {
     $app.classList.remove('loading')
   })
 
