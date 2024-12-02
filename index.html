@@ -242,73 +242,6 @@ const miniSearch = new MiniSearch({
 
 
 
-// Bind event listeners:
-
-// Typing into search bar updates search results and suggestions
-$searchInput.addEventListener('input', (event) => {
-  const query = $searchInput.value
-
-  const results = (query.length > 1) ? getSearchResults(query) : []
-  renderSearchResults(results)
-
-  const suggestions = (query.length > 1) ? getSuggestions(query) : []
-  renderSuggestions(suggestions)
-})
-
-// Clicking on clear button clears search and suggestions
-$clearButton.addEventListener('click', () => {
-  $searchInput.value = ''
-  $searchInput.focus()
-
-  renderSearchResults([])
-  renderSuggestions([])
-})
-
-// Clicking on a suggestion selects it
-$suggestionList.addEventListener('click', (event) => {
-  const $suggestion = event.target
-
-  if ($suggestion.classList.contains('Suggestion')) {
-    const query = $suggestion.innerText.trim()
-    $searchInput.value = query
-    $searchInput.focus()
-
-    const results = getSearchResults(query)
-    renderSearchResults(results)
-    renderSuggestions([])
-  }
-})
-
-// Pressing up/down/enter key while on search bar navigates through suggestions
-$search.addEventListener('keydown', (event) => {
-  const key = event.key
-
-  if (key === 'ArrowDown') {
-    selectSuggestion(+1)
-  } else if (key === 'ArrowUp') {
-    selectSuggestion(-1)
-  } else if (key === 'Enter' || key === 'Escape') {
-    $searchInput.blur()
-    renderSuggestions([])
-  } else {
-    return
-  }
-  const query = $searchInput.value
-  const results = getSearchResults(query)
-  renderSearchResults(results)
-})
-
-// Clicking outside of search bar clears suggestions
-$app.addEventListener('click', (event) => {
-  renderSuggestions([])
-})
-
-// Changing any advanced option triggers a new search with the updated options
-$options.addEventListener('change', (event) => {
-  const query = $searchInput.value
-  const results = getSearchResults(query)
-  renderSearchResults(results)
-})
 
 // Define functions and support variables
 const searchOptions = {
@@ -467,6 +400,73 @@ const $options = document.querySelector('.AdvancedOptions form')
 $app.classList.add('loading')
 let songsById = {}
 
+// Bind event listeners:
+
+// Typing into search bar updates search results and suggestions
+$searchInput.addEventListener('input', (event) => {
+  const query = $searchInput.value
+
+  const results = (query.length > 1) ? getSearchResults(query) : []
+  renderSearchResults(results)
+
+  const suggestions = (query.length > 1) ? getSuggestions(query) : []
+  renderSuggestions(suggestions)
+})
+
+// Clicking on clear button clears search and suggestions
+$clearButton.addEventListener('click', () => {
+  $searchInput.value = ''
+  $searchInput.focus()
+
+  renderSearchResults([])
+  renderSuggestions([])
+})
+
+// Clicking on a suggestion selects it
+$suggestionList.addEventListener('click', (event) => {
+  const $suggestion = event.target
+
+  if ($suggestion.classList.contains('Suggestion')) {
+    const query = $suggestion.innerText.trim()
+    $searchInput.value = query
+    $searchInput.focus()
+
+    const results = getSearchResults(query)
+    renderSearchResults(results)
+    renderSuggestions([])
+  }
+})
+
+// Pressing up/down/enter key while on search bar navigates through suggestions
+$search.addEventListener('keydown', (event) => {
+  const key = event.key
+
+  if (key === 'ArrowDown') {
+    selectSuggestion(+1)
+  } else if (key === 'ArrowUp') {
+    selectSuggestion(-1)
+  } else if (key === 'Enter' || key === 'Escape') {
+    $searchInput.blur()
+    renderSuggestions([])
+  } else {
+    return
+  }
+  const query = $searchInput.value
+  const results = getSearchResults(query)
+  renderSearchResults(results)
+})
+
+// Clicking outside of search bar clears suggestions
+$app.addEventListener('click', (event) => {
+  renderSuggestions([])
+})
+
+// Changing any advanced option triggers a new search with the updated options
+$options.addEventListener('change', (event) => {
+  const query = $searchInput.value
+  const results = getSearchResults(query)
+  renderSearchResults(results)
+})
                   
                       const populateYears = (selector, minYear, maxYear, selectedYear) => {
                         document.querySelector(selector).innerHTML = 
