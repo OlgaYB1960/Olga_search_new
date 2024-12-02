@@ -234,16 +234,189 @@ details, summary {
       </style>
 
   </head>
-  <body>
-  <script>
-// Setup MiniSearch
+   <body>
+    <div id="app">
+      <div class="App">
+        <div class="Loader">loading...</div>
+        <article class="main">
+          <header class="Header">
+            <h1>Song Search</h1>
+            <div class="SearchBox">
+              <div class="Search">
+                <input type="text" autoComplete="none" autoCorrect="none" autoCapitalize="none" spellCheck="false" />
+                <button class="clear">&times;</button>
+              </div>
+
+              <ul class="SuggestionList">
+              </ul>
+
+              <details class="AdvancedOptions">
+                <summary>Advanced options</summary>
+                <form class="options">
+                  <div>
+                    <b>Search in fields:</b>
+                    <label>
+                      <input type="checkbox" name="fields" value="title" checked />
+                      Title
+                    </label>
+                    <label>
+                      <input type="checkbox" name="fields" value="artist" checked />
+                      Artist
+                    </label>
+                  </div>
+                  <div>
+                    <b>Search options:</b>
+                    <label><input type="checkbox" name="prefix" value="true" checked /> Prefix</label>
+                    <label><input type="checkbox" name="fuzzy" value="true" checked /> Fuzzy</label>
+                  </div>
+                  <div>
+                    <b>Combine terms with:</b>
+                    <label><input type="radio" name="combineWith" value="OR" checked /> OR</label>
+                    <label><input type="radio" name="combineWith" value="AND" /> AND</label>
+                  </div>
+                  <div>
+                    <b>Filter:</b>
+                    <label>
+                      from year:
+                      <select name="fromYear">
+                        <!-- populated by JS with list of years -->
+                      </select>
+                    </label>
+                    <label>
+                      to year:
+                      <select name="toYear">
+                        <!-- populated by JS with list of years -->
+                      </select>
+                    </label>
+                    <script type="text/javascript">
+                      const populateYears = (selector, minYear, maxYear, selectedYear) => {
+                        document.querySelector(selector).innerHTML = 
+                          Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
+                          .map(y => `<option value="${y}" ${y === selectedYear ? 'selected' : ''}>${y}</option>`)
+                          .join('\n')
+                      }
+
+                      populateYears('select[name=fromYear]', 1965, 2015, 1965)
+                      populateYears('select[name=toYear]', 1965, 2015, 2015)
+                    </script>
+                  </div>
+                </form>
+              </details>
+            </div>
+          </header>
+          <p class="Explanation">
+            This is a demo of the <a
+              href="https://github.com/lucaong/minisearch">MiniSearch</a> JavaScript
+            library: try searching through more than 5000 top songs and artists
+            in <em>Billboard Hot 100</em> from year 1965 to 2015. This example
+            demonstrates search (with prefix and fuzzy match) and auto-completion.
+          </p>
+          <ul class="SongList">
+          </ul>
+        </article>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.0/dist/umd/index.min.js"></script>
+   
+     <script type="text/javascript">
 const miniSearch = new MiniSearch({
   fields: ['artist', 'title'],
   storeFields: ['year']
 })
 
+// Select DOM elements
+const $app = document.querySelector('.App')
+const $search = document.querySelector('.Search')
+const $searchInput = document.querySelector('.Search input')
+const $clearButton = document.querySelector('.Search button.clear')
+const $songList = document.querySelector('.SongList')
+const $explanation = document.querySelector('.Explanation')
+const $suggestionList = document.querySelector('.SuggestionList')
+const $options = document.querySelector('.AdvancedOptions form')
 
+// Fetch and index data
+$app.classList.add('loading')
+let songsById = {}
 
+fetch('billboard_1965-2015.json')
+  .then(response => response.json())
+  .then((allSongs) => {
+    songsById = allSongs.reduce((byId, song) => {
+      byId[song.id] = song
+      return byId
+    }, {})
+    return miniSearch.addAll(allSongs)
+  }).then(() => {
+    $app.classList.remove('loading')
+  })
+
+// Bind event listeners:
+
+// Typing into search bar updates search results and suggestions
+$searchInput.addEventListener('input', (event) => {
+  const query = $searchInput.value
+
+  const results = (query.length > 1) ? getSearchResults(query) : []
+  renderSearchResults(results)
+
+  const suggestions = (query.length > 1) ? getSuggestions(query) : []
+  renderSuggestions(suggestions)
+})
+
+// Clicking on clear button clears search and suggestions
+$clearButton.addEventListener('click', () => {
+  $searchInput.value = ''
+  $searchInput.focus()
+
+  renderSearchResults([])
+  renderSuggestions([])
+})
+
+// Clicking on a suggestion selects it
+$suggestionList.addEventListener('click', (event) => {
+  const $suggestion = event.target
+
+  if ($suggestion.classList.contains('Suggestion')) {
+    const query = $suggestion.innerText.trim()
+    $searchInput.value = query
+    $searchInput.focus()
+
+    const results = getSearchResults(query)
+    renderSearchResults(results)
+    renderSuggestions([])
+  }
+})
+
+// Pressing up/down/enter key while on search bar navigates through suggestions
+$search.addEventListener('keydown', (event) => {
+  const key = event.key
+
+  if (key === 'ArrowDown') {
+    selectSuggestion(+1)
+  } else if (key === 'ArrowUp') {
+    selectSuggestion(-1)
+  } else if (key === 'Enter' || key === 'Escape') {
+    $searchInput.blur()
+    renderSuggestions([])
+  } else {
+    return
+  }
+  const query = $searchInput.value
+  const results = getSearchResults(query)
+  renderSearchResults(results)
+})
+
+// Clicking outside of search bar clears suggestions
+$app.addEventListener('click', (event) => {
+  renderSuggestions([])
+})
+
+// Changing any advanced option triggers a new search with the updated options
+$options.addEventListener('change', (event) => {
+  const query = $searchInput.value
+  const results = getSearchResults(query)
+  renderSearchResults(results)
+})
 
 // Define functions and support variables
 const searchOptions = {
@@ -330,168 +503,6 @@ const getSearchOptions = () => {
   return searchOptions
 }
 
-const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpperCase())
-  
-</script>
-    
-    <div id="app">
-      <div class="App">
-        <div class="Loader">loading...</div>
-        <article class="main">
-          <header class="Header">
-            <h1>Song Search</h1>
-            <div class="SearchBox">
-              <div class="Search">
-                <input type="text" spellCheck="false" autoComplete="none" autoCorrect="none" placeholder="Ввести значение" />
-                <button class="clear" type = "reset" >&times;</button>
-              </div>
-
-              <ul class="SuggestionList">
-              </ul>
-
-              <details class="AdvancedOptions">
-                <summary>Advanced options</summary>
-                <form class="options">
-                  <div>
-                    <b>Search in fields:</b>
-                    <label>
-                      <input type="checkbox" name="fields" value="title" checked />
-                      Title
-                    </label>
-                    <label>
-                      <input type="checkbox" name="fields" value="artist" checked />
-                      Artist
-                    </label>
-                  </div>
-                  <div>
-                    <b>Search options:</b>
-                    <label><input type="checkbox" name="prefix" value="true" checked /> Prefix</label>
-                    <label><input type="checkbox" name="fuzzy" value="true" checked /> Fuzzy</label>
-                  </div>
-                  <div>
-                    <b>Combine terms with:</b>
-                    <label><input type="radio" name="combineWith" value="OR" checked /> OR</label>
-                    <label><input type="radio" name="combineWith" value="AND" /> AND</label>
-                  </div>
-                  <div>
-                    <b>Filter:</b>
-                    <label>
-                      from year:
-                      <select name="fromYear">
-                        <!-- populated by JS with list of years -->
-                      </select>
-                    </label>
-                    <label>
-                      to year:
-                      <select name="toYear">
-                        <!-- populated by JS with list of years -->
-                      </select>
-                    </label>
-                <script type="text/javascript">
-              // Select DOM elements
-const $app = document.querySelector('.App')
-const $search = document.querySelector('.Search')
-const $searchInput = document.querySelector('.Search input')
-const $clearButton = document.querySelector('.Search button.clear')
-const $songList = document.querySelector('.SongList')
-const $explanation = document.querySelector('.Explanation')
-const $suggestionList = document.querySelector('.SuggestionList')
-const $options = document.querySelector('.AdvancedOptions form')
-
-// Fetch and index data
-$app.classList.add('loading')
-let songsById = {}
-
-// Bind event listeners:
-
-// Typing into search bar updates search results and suggestions
-$searchInput.addEventListener('input', (event) => {
-  const query = $searchInput.value
-
-  const results = (query.length > 1) ? getSearchResults(query) : []
-  renderSearchResults(results)
-
-  const suggestions = (query.length > 1) ? getSuggestions(query) : []
-  renderSuggestions(suggestions)
-})
-
-// Clicking on clear button clears search and suggestions
-$clearButton.addEventListener('click', () => {
-  $searchInput.value = ''
-  $searchInput.focus()
-
-  renderSearchResults([])
-  renderSuggestions([])
-})
-
-// Clicking on a suggestion selects it
-$suggestionList.addEventListener('click', (event) => {
-  const $suggestion = event.target
-
-  if ($suggestion.classList.contains('Suggestion')) {
-    const query = $suggestion.innerText.trim()
-    $searchInput.value = query
-    $searchInput.focus()
-
-    const results = getSearchResults(query)
-    renderSearchResults(results)
-    renderSuggestions([])
-  }
-})
-
-// Pressing up/down/enter key while on search bar navigates through suggestions
-$search.addEventListener('keydown', (event) => {
-  const key = event.key
-
-  if (key === 'ArrowDown') {
-    selectSuggestion(+1)
-  } else if (key === 'ArrowUp') {
-    selectSuggestion(-1)
-  } else if (key === 'Enter' || key === 'Escape') {
-    $searchInput.blur()
-    renderSuggestions([])
-  } else {
-    return
-  }
-  const query = $searchInput.value
-  const results = getSearchResults(query)
-  renderSearchResults(results)
-})
-
-// Clicking outside of search bar clears suggestions
-$app.addEventListener('click', (event) => {
-  renderSuggestions([])
-})
-
-// Changing any advanced option triggers a new search with the updated options
-$options.addEventListener('change', (event) => {
-  const query = $searchInput.value
-  const results = getSearchResults(query)
-  renderSearchResults(results)
-})
-                  
-                      const populateYears = (selector, minYear, maxYear, selectedYear) => {
-                        document.querySelector(selector).innerHTML = 
-                          Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
-                          .map(y => `<option value="${y}" ${y === selectedYear ? 'selected' : ''}>${y}</option>`)
-                          .join('\n')
-                      }
-
-                      populateYears('select[name=fromYear]', 1965, 2015, 1965)
-                      populateYears('select[name=toYear]', 1965, 2015, 2015)
-                    </script>
-                  </div>
-                </form>
-              </details>
-            </div>
-          </header>
-        
-          <ul class="SongList">
-          </ul>
-        </article>
-      </div>
-    </div>
-
- 
+const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpperCase())></script>
   </body>
 </html>
