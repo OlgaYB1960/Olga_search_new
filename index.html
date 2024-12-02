@@ -334,9 +334,7 @@ const $explanation = document.querySelector('.Explanation')
 const $suggestionList = document.querySelector('.SuggestionList')
 const $options = document.querySelector('.AdvancedOptions form')
 
-// Fetch and index data
-$app.classList.add('loading')
-let songsById = {}
+
 
        const arr = [{"id":0,"rank":1,"title":"wooly bully","artist":"sam the sham and the pharaohs","year":"1965"},
              {"id":1,"rank":2,"title":"i cant help myself sugar pie honey bunch","artist":"four tops","year":"1965"},
@@ -345,17 +343,6 @@ let songsById = {}
              {"id":4,"rank":5,"title":"youve lost that lovin feelin","artist":"the righteous brothers","year":"1965"},
 ];
        
-fetch(arr)
-  .then(response => response.json())
-  .then((allSongs) => {
-    songsById = allSongs.reduce((byId, song) => {
-      byId[song.id] = song
-      return byId
-    }, {})
-    return miniSearch.addAll(allSongs)
-  }).then(() => {
-    $app.classList.remove('loading')
-  })
 
 
 // Bind event listeners:
