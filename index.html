@@ -230,7 +230,85 @@ details, summary {
   }
 }
       </style>
-<script>
+
+  </head>
+  <body>
+    <div id="app">
+      <div class="App">
+        <div class="Loader">loading...</div>
+        <article class="main">
+          <header class="Header">
+            <h1>Song Search</h1>
+            <div class="SearchBox">
+              <div class="Search">
+                <input type="text" spellCheck="false" autoComplete="none" autoCorrect="none" placeholder="Ввести значение" />
+                <button class="clear" type = "reset" >&times;</button>
+              </div>
+
+              <ul class="SuggestionList">
+              </ul>
+
+              <details class="AdvancedOptions">
+                <summary>Advanced options</summary>
+                <form class="options">
+                  <div>
+                    <b>Search in fields:</b>
+                    <label>
+                      <input type="checkbox" name="fields" value="title" checked />
+                      Title
+                    </label>
+                    <label>
+                      <input type="checkbox" name="fields" value="artist" checked />
+                      Artist
+                    </label>
+                  </div>
+                  <div>
+                    <b>Search options:</b>
+                    <label><input type="checkbox" name="prefix" value="true" checked /> Prefix</label>
+                    <label><input type="checkbox" name="fuzzy" value="true" checked /> Fuzzy</label>
+                  </div>
+                  <div>
+                    <b>Combine terms with:</b>
+                    <label><input type="radio" name="combineWith" value="OR" checked /> OR</label>
+                    <label><input type="radio" name="combineWith" value="AND" /> AND</label>
+                  </div>
+                  <div>
+                    <b>Filter:</b>
+                    <label>
+                      from year:
+                      <select name="fromYear">
+                        <!-- populated by JS with list of years -->
+                      </select>
+                    </label>
+                    <label>
+                      to year:
+                      <select name="toYear">
+                        <!-- populated by JS with list of years -->
+                      </select>
+                    </label>
+                <script type="text/javascript">
+                      const populateYears = (selector, minYear, maxYear, selectedYear) => {
+                        document.querySelector(selector).innerHTML = 
+                          Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
+                          .map(y => `<option value="${y}" ${y === selectedYear ? 'selected' : ''}>${y}</option>`)
+                          .join('\n')
+                      }
+
+                      populateYears('select[name=fromYear]', 1965, 2015, 1965)
+                      populateYears('select[name=toYear]', 1965, 2015, 2015)
+                    </script>
+                  </div>
+                </form>
+              </details>
+            </div>
+          </header>
+        
+          <ul class="SongList">
+          </ul>
+        </article>
+      </div>
+    </div>
+  <script>
 // Setup MiniSearch
 const miniSearch = new MiniSearch({
   fields: ['artist', 'title'],
@@ -409,84 +487,6 @@ const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpper
 
   
 </script>
-  </head>
-  <body>
-    <div id="app">
-      <div class="App">
-        <div class="Loader">loading...</div>
-        <article class="main">
-          <header class="Header">
-            <h1>Song Search</h1>
-            <div class="SearchBox">
-              <div class="Search">
-                <input type="text" spellCheck="false" autoComplete="none" autoCorrect="none" placeholder="Ввести значение" />
-                <button class="clear" type = "reset" >&times;</button>
-              </div>
-
-              <ul class="SuggestionList">
-              </ul>
-
-              <details class="AdvancedOptions">
-                <summary>Advanced options</summary>
-                <form class="options">
-                  <div>
-                    <b>Search in fields:</b>
-                    <label>
-                      <input type="checkbox" name="fields" value="title" checked />
-                      Title
-                    </label>
-                    <label>
-                      <input type="checkbox" name="fields" value="artist" checked />
-                      Artist
-                    </label>
-                  </div>
-                  <div>
-                    <b>Search options:</b>
-                    <label><input type="checkbox" name="prefix" value="true" checked /> Prefix</label>
-                    <label><input type="checkbox" name="fuzzy" value="true" checked /> Fuzzy</label>
-                  </div>
-                  <div>
-                    <b>Combine terms with:</b>
-                    <label><input type="radio" name="combineWith" value="OR" checked /> OR</label>
-                    <label><input type="radio" name="combineWith" value="AND" /> AND</label>
-                  </div>
-                  <div>
-                    <b>Filter:</b>
-                    <label>
-                      from year:
-                      <select name="fromYear">
-                        <!-- populated by JS with list of years -->
-                      </select>
-                    </label>
-                    <label>
-                      to year:
-                      <select name="toYear">
-                        <!-- populated by JS with list of years -->
-                      </select>
-                    </label>
-                <script type="text/javascript">
-                      const populateYears = (selector, minYear, maxYear, selectedYear) => {
-                        document.querySelector(selector).innerHTML = 
-                          Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
-                          .map(y => `<option value="${y}" ${y === selectedYear ? 'selected' : ''}>${y}</option>`)
-                          .join('\n')
-                      }
-
-                      populateYears('select[name=fromYear]', 1965, 2015, 1965)
-                      populateYears('select[name=toYear]', 1965, 2015, 2015)
-                    </script>
-                  </div>
-                </form>
-              </details>
-            </div>
-          </header>
-        
-          <ul class="SongList">
-          </ul>
-        </article>
-      </div>
-    </div>
-  
  
   </body>
 </html>
