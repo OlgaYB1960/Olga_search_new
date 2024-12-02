@@ -240,19 +240,6 @@ const miniSearch = new MiniSearch({
   storeFields: ['year']
 })
 
-// Select DOM elements
-const $app = document.querySelector('.App')
-const $search = document.querySelector('.Search')
-const $searchInput = document.querySelector('.Search input')
-const $clearButton = document.querySelector('.Search button.clear')
-const $songList = document.querySelector('.SongList')
-const $explanation = document.querySelector('.Explanation')
-const $suggestionList = document.querySelector('.SuggestionList')
-const $options = document.querySelector('.AdvancedOptions form')
-
-// Fetch and index data
-$app.classList.add('loading')
-let songsById = {}
 
 
 // Bind event listeners:
@@ -466,6 +453,21 @@ const capitalize = (string) => string.replace(/(\b\w)/gi, (char) => char.toUpper
                       </select>
                     </label>
                 <script type="text/javascript">
+              // Select DOM elements
+const $app = document.querySelector('.App')
+const $search = document.querySelector('.Search')
+const $searchInput = document.querySelector('.Search input')
+const $clearButton = document.querySelector('.Search button.clear')
+const $songList = document.querySelector('.SongList')
+const $explanation = document.querySelector('.Explanation')
+const $suggestionList = document.querySelector('.SuggestionList')
+const $options = document.querySelector('.AdvancedOptions form')
+
+// Fetch and index data
+$app.classList.add('loading')
+let songsById = {}
+
+                  
                       const populateYears = (selector, minYear, maxYear, selectedYear) => {
                         document.querySelector(selector).innerHTML = 
                           Array.from({ length: maxYear - minYear + 1 }, (_, i) => i + minYear)
