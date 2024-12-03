@@ -339,7 +339,7 @@ miniSearch.search('zen', { fields: ['title'] })
 miniSearch.search('zen', { boost: { title: 2 } })
 
 // Prefix search (so that 'moto' will match 'motorcycle')
-var ttt = miniSearch.search('moto', { prefix: true })
+var ttt = miniSearch.search('Neuroman', { prefix: true })
 
 // Fuzzy search, in this example, with a max edit distance of 0.2 * term length.
 // The mispelled 'ismael' will match 'ishmael'.
