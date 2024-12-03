@@ -340,9 +340,8 @@ let songsById = {}
        
 // Fetch and index data
 
-fetch('https://olgayb1960.github.io/Olga_search_new/billboard_1965-2015.json')
-  .then(response => response.json())
-  .then((allSongs) => {
+
+  arr.then((allSongs) => {
     songsById = allSongs.reduce((byId, song) => {
       byId[song.id] = song
       return byId
@@ -351,6 +350,8 @@ fetch('https://olgayb1960.github.io/Olga_search_new/billboard_1965-2015.json')
   }).then(() => {
     $app.classList.remove('loading')
   })
+
+       
 // Bind event listeners:
 
 // Typing into search bar updates search results and suggestions
