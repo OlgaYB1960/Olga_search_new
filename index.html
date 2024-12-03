@@ -340,17 +340,12 @@ let songsById = {}
        
 // Fetch and index data
 
-arr.then(response => response.json())
-  arr.then((allSongs) => {
-    songsById = allSongs.reduce((byId, song) => {
-      byId[song.id] = song
-      return byId
-    }, {})
-    return miniSearch.addAll(allSongs)
-  }).then(() => {
-    $app.classList.remove('loading')
-  })
+const transformedObj1 = JSON.parse(arr, (key, value) => {
+  return typeof value === "object" ? undefined : value;
+});
 
+console.log(transformedObj1); // undefined
+        $app.classList.remove('loading')
        
 // Bind event listeners:
 
