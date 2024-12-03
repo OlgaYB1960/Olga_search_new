@@ -313,45 +313,13 @@ details, summary {
     <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.0/dist/umd/index.min.js"></script>
    
      <script  type="text/javascript">
-const documents = [
-  { id: 1, title: 'Moby Dick', text: 'Call me Ishmael. Some years ago...' },
-  { id: 2, title: 'Zen and the Art of Motorcycle Maintenance', text: 'I can see by my watch...' },
-  { id: 3, title: 'Neuromancer', text: 'The sky above the port was...' },
-  { id: 4, title: 'Zen and the Art of Archery', text: 'At first sight it must seem...' },
-  // ...and more
-]
-
-// Create the search engine, and set `title` and `text` as searchable fields
-let miniSearch = new MiniSearch({ fields: ['title', 'text'] })
-
-// Index all documents (this is fast!)
-miniSearch.addAll(documents)
-
-// Search with default options. It will return the id of the matching documents,
-// along with a relevance score and match information
-miniSearch.search('zen art motorcycle')
-// => [ { id: 2, score: 2.77258, match: { ... } }, { id: 4, score: 1.38629, match: { ... } } ]
-
-// Search only within specific fields
-miniSearch.search('zen', { fields: ['title'] })
-
-// Boost some fields to give them more importance (here "title")
-miniSearch.search('zen', { boost: { title: 2 } })
-
-// Prefix search (so that 'moto' will match 'motorcycle')
-var ttt = miniSearch.search('can', { prefix: true })
-
-// Fuzzy search, in this example, with a max edit distance of 0.2 * term length.
-// The mispelled 'ismael' will match 'ishmael'.
-miniSearch.search('ismael', { fuzzy: 0.2 })
-
-// Get suggestions for a partial search
-miniSearch.autoSuggest('zen ar')
-
+const miniSearch = new MiniSearch({
+  fields: ['artist', 'title'],
+  storeFields: ['year']
+})
        
-
-
 // Select DOM elements
+       
 const $app = document.querySelector('.App')
 const $search = document.querySelector('.Search')
 const $searchInput = document.querySelector('.Search input')
