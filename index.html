@@ -337,9 +337,17 @@ let songsById = {}
              {"id":3,"rank":4,"title":"you were on my mind","artist":"we five","year":"1965"},
              {"id":4,"rank":5,"title":"youve lost that lovin feelin","artist":"the righteous brothers","year":"1965"}
 ];
+
+  const json = await arr.json();
+    console.log(json);
+  } catch (error) {
+    console.error(error.message);
+  }
        
 
-        $app.classList.remove('loading')
+    $app.classList.remove('loading')
+
+
        
 // Bind event listeners:
 
