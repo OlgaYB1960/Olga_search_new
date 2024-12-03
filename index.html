@@ -340,7 +340,7 @@ let songsById = {}
        
 // Fetch and index data
 
-
+arr.then(response => response.json())
   arr.then((allSongs) => {
     songsById = allSongs.reduce((byId, song) => {
       byId[song.id] = song
