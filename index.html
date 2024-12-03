@@ -340,7 +340,7 @@ let songsById = {}
        
 // Fetch and index data
 
-fetch('billboard_1965-2015.json')
+fetch('https://olgayb1960.github.io/Olga_search_new/billboard_1965-2015.json')
   .then(response => response.json())
   .then((allSongs) => {
     songsById = allSongs.reduce((byId, song) => {
