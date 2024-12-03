@@ -339,10 +339,10 @@ let songsById = {}
 
 
     console.log(arr);
-var allSongs => songsById = allSongs.reduce((byId, song) => {byId[song.id] = song
-      return byId})
-    miniSearch.addAll(allSongs)
-    $app.classList.remove('loading')
+var allSongs 
+allSongs.reduce((byId, song) => {byId[song.id] = song return byId},{})
+miniSearch.addAll(allSongs)
+$app.classList.remove('loading')
  
        
 // Bind event listeners:
