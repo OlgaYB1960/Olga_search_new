@@ -340,7 +340,7 @@ let songsById = {}
        
 // Fetch and index data
 
-const transformedObj1 = JSON.parse(arr, (key, value) => {
+const transformedObj1 = JSON.parse('[1,5,{"s":1}]', (key, value) => {
   return typeof value === "object" ? undefined : value;
 });
 
