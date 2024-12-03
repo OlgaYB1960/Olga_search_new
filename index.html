@@ -341,7 +341,7 @@ let songsById = {}
     console.log(arr);
 allSongs => songsById = allSongs.reduce((byId, song) => {byId[song.id] = song
       return byId})
-    return miniSearch.addAll(allSongs)
+    miniSearch.addAll(allSongs)
     $app.classList.remove('loading')
  
        
