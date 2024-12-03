@@ -335,15 +335,15 @@ let songsById = {}
              {"id":1,"rank":2,"title":"i cant help myself sugar pie honey bunch","artist":"four tops","year":"1965"},
              {"id":2,"rank":3,"title":"i cant get no satisfaction","artist":"the rolling stones","year":"1965"},
              {"id":3,"rank":4,"title":"you were on my mind","artist":"we five","year":"1965"},
-             {"id":4,"rank":5,"title":"youve lost that lovin feelin","artist":"the righteous brothers","year":"1965"}];
+             {"id":4,"rank":5,"title":"youve lost that lovin feelin","artist":"the righteous brothers","year":"1965"}]
 
 
     console.log(arr);
-
-
+allSongs => songsById = allSongs.reduce((byId, song) => {byId[song.id] = song
+      return byId} 
+    return miniSearch.addAll(allSongs)
     $app.classList.remove('loading')
-
-
+ 
        
 // Bind event listeners:
 
